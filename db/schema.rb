@@ -10,9 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2019_03_03_064358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "attempts", force: :cascade do |t|
+    t.string "answer"
+    t.boolean "correct"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "test_id"
+    t.index ["test_id"], name: "index_attempts_on_test_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.string "subclass"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tests", force: :cascade do |t|
+    t.string "question"
+    t.string "answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_tests_on_category_id"
+  end
+
+  create_table "words", force: :cascade do |t|
+    t.string "english"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "spanish"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_words_on_category_id"
+  end
+
+  add_foreign_key "attempts", "tests"
+  add_foreign_key "tests", "categories"
+  add_foreign_key "words", "categories"
 end
